@@ -1,0 +1,225 @@
+:root {
+  --color-primary: #1a5c99;
+  --color-primary-dark: #123f6b;
+  --color-error: #b3261e;
+  --color-success: #1e7a34;
+  --color-bg: #f4f7fa;
+  --color-card: #ffffff;
+  --color-border: #d5dce3;
+  --color-text: #1c2733;
+  --color-muted: #5b6b7c;
+  font-size: 16px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+header.app-header {
+  background: var(--color-primary);
+  color: #fff;
+  padding: 1rem 1.5rem;
+}
+
+header.app-header h1 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+main.app-main {
+  max-width: 640px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.step-indicator {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
+.step-indicator .step {
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: var(--color-card);
+}
+
+.step-indicator .step.is-active {
+  background: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
+  font-weight: 600;
+}
+
+.card {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 1.5rem;
+}
+
+.form-field {
+  margin-bottom: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.form-field label {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.form-row .form-field {
+  flex: 1;
+}
+
+input,
+select {
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-size: 1rem;
+  background: #fff;
+  color: var(--color-text);
+}
+
+input:invalid,
+select:invalid {
+  box-shadow: none;
+}
+
+.field-error {
+  color: var(--color-error);
+  font-size: 0.8rem;
+  min-height: 1.1em;
+}
+
+.form-error-summary {
+  color: var(--color-error);
+  background: #fdecea;
+  border: 1px solid #f3c2bd;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  display: none;
+}
+
+.form-error-summary.is-visible {
+  display: block;
+}
+
+.price-preview {
+  background: #eef4fa;
+  border: 1px dashed var(--color-primary);
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  margin-bottom: 1.2rem;
+  font-size: 0.95rem;
+}
+
+.price-preview .price-preview-total {
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--color-primary-dark);
+}
+
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+  gap: 1rem;
+}
+
+button {
+  font-size: 1rem;
+  padding: 0.65rem 1.3rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-dark);
+}
+
+.btn-primary:disabled {
+  background: #9db6c9;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: #fff;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+}
+
+.summary-list {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  row-gap: 0.6rem;
+  column-gap: 1rem;
+  margin: 0 0 1.5rem;
+}
+
+.summary-list dt {
+  color: var(--color-muted);
+  font-weight: 600;
+}
+
+.summary-list dd {
+  margin: 0;
+}
+
+.summary-total-row dt,
+.summary-total-row dd {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-primary-dark);
+}
+
+.confirmation-panel {
+  text-align: center;
+}
+
+.confirmation-icon {
+  font-size: 3rem;
+  color: var(--color-success);
+}
+
+.confirmation-title {
+  color: var(--color-success);
+}
+
+.booking-id {
+  font-family: "Courier New", monospace;
+  background: #eef4fa;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  display: inline-block;
+}
+
+.hidden {
+  display: none !important;
+}

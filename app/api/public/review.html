@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Roam Trip Booking - Review</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body id="page-review" data-testid="page-review">
+  <header class="app-header">
+    <h1>Roam Trip Booking</h1>
+  </header>
+  <main class="app-main">
+    <nav class="step-indicator" aria-label="Booking steps">
+      <span class="step" data-testid="step-trip" id="step-trip">1. Trip</span>
+      <span class="step" data-testid="step-traveler" id="step-traveler">2. Traveler</span>
+      <span class="step is-active" data-testid="step-review" id="step-review">3. Review</span>
+      <span class="step" data-testid="step-confirmation" id="step-confirmation">4. Confirmation</span>
+    </nav>
+
+    <section class="card">
+      <h2>Review your booking</h2>
+
+      <div class="form-error-summary" id="review-form-error" data-testid="review-form-error" role="alert"></div>
+
+      <dl class="summary-list" id="trip-summary" data-testid="trip-summary">
+        <dt>Destination</dt>
+        <dd id="summary-destination" data-testid="summary-destination"></dd>
+
+        <dt>Departure country</dt>
+        <dd id="summary-departure-country" data-testid="summary-departure-country"></dd>
+
+        <dt>Departure date</dt>
+        <dd id="summary-departure-date" data-testid="summary-departure-date"></dd>
+
+        <dt>Return date</dt>
+        <dd id="summary-arrival-date" data-testid="summary-arrival-date"></dd>
+
+        <dt>Adults</dt>
+        <dd id="summary-adults" data-testid="summary-adults"></dd>
+
+        <dt>Children</dt>
+        <dd id="summary-children" data-testid="summary-children"></dd>
+
+        <dt>Traveler</dt>
+        <dd id="summary-traveler-name" data-testid="summary-traveler-name"></dd>
+
+        <dt>Phone</dt>
+        <dd id="summary-traveler-phone" data-testid="summary-traveler-phone"></dd>
+
+        <dt>Email</dt>
+        <dd id="summary-traveler-email" data-testid="summary-traveler-email"></dd>
+
+        <dt>Price per traveler</dt>
+        <dd id="summary-price-per-person" data-testid="summary-price-per-person"></dd>
+
+        <dt class="summary-total-row">Total price</dt>
+        <dd class="summary-total-row" id="summary-total-price" data-testid="summary-total-price"></dd>
+      </dl>
+
+      <div class="button-row">
+        <button type="button" class="btn-secondary" id="back-to-traveler-btn" data-testid="back-to-traveler-btn">
+          Back
+        </button>
+        <button type="button" class="btn-primary" id="confirm-booking-btn" data-testid="confirm-booking-btn">
+          Confirm booking
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/state.js"></script>
+  <script src="/js/page-review.js"></script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Roam Trip Booking - Confirmation</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body id="page-confirmation" data-testid="page-confirmation">
+  <header class="app-header">
+    <h1>Roam Trip Booking</h1>
+  </header>
+  <main class="app-main">
+    <nav class="step-indicator" aria-label="Booking steps">
+      <span class="step" data-testid="step-trip" id="step-trip">1. Trip</span>
+      <span class="step" data-testid="step-traveler" id="step-traveler">2. Traveler</span>
+      <span class="step" data-testid="step-review" id="step-review">3. Review</span>
+      <span class="step is-active" data-testid="step-confirmation" id="step-confirmation">4. Confirmation</span>
+    </nav>
+
+    <section class="card confirmation-panel">
+      <div class="confirmation-icon" aria-hidden="true">&#10003;</div>
+      <h2 class="confirmation-title" id="booking-success-message" data-testid="booking-success-message">
+        Booking confirmed!
+      </h2>
+      <p>
+        Booking reference:
+        <span class="booking-id" id="confirmation-booking-id" data-testid="confirmation-booking-id"></span>
+      </p>
+
+      <dl class="summary-list" id="confirmation-summary" data-testid="confirmation-summary">
+        <dt>Destination</dt>
+        <dd id="confirmation-destination" data-testid="confirmation-destination"></dd>
+
+        <dt>Departure country</dt>
+        <dd id="confirmation-departure-country" data-testid="confirmation-departure-country"></dd>
+
+        <dt>Departure date</dt>
+        <dd id="confirmation-departure-date" data-testid="confirmation-departure-date"></dd>
+
+        <dt>Return date</dt>
+        <dd id="confirmation-arrival-date" data-testid="confirmation-arrival-date"></dd>
+
+        <dt>Travelers</dt>
+        <dd id="confirmation-travelers" data-testid="confirmation-travelers"></dd>
+
+        <dt>Traveler name</dt>
+        <dd id="confirmation-traveler-name" data-testid="confirmation-traveler-name"></dd>
+
+        <dt class="summary-total-row">Total paid</dt>
+        <dd class="summary-total-row" id="confirmation-total-price" data-testid="confirmation-total-price"></dd>
+      </dl>
+
+      <div class="button-row">
+        <span></span>
+        <button type="button" class="btn-primary" id="new-booking-btn" data-testid="new-booking-btn">
+          Book another trip
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/state.js"></script>
+  <script src="/js/page-confirmation.js"></script>
+</body>
+</html>

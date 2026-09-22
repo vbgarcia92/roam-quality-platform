@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Roam Trip Booking - Select Trip</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body id="page-trip-selection" data-testid="page-trip-selection">
+  <header class="app-header">
+    <h1>Roam Trip Booking</h1>
+  </header>
+  <main class="app-main">
+    <nav class="step-indicator" aria-label="Booking steps">
+      <span class="step is-active" data-testid="step-trip" id="step-trip">1. Trip</span>
+      <span class="step" data-testid="step-traveler" id="step-traveler">2. Traveler</span>
+      <span class="step" data-testid="step-review" id="step-review">3. Review</span>
+      <span class="step" data-testid="step-confirmation" id="step-confirmation">4. Confirmation</span>
+    </nav>
+
+    <section class="card">
+      <h2>Plan your trip</h2>
+
+      <div class="form-error-summary" id="trip-form-error" data-testid="trip-form-error" role="alert"></div>
+
+      <form id="trip-search-form" data-testid="trip-search-form" novalidate>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="departure-country">Departure country</label>
+            <select id="departure-country" name="departureCountry" data-testid="departure-country-select" required>
+              <option value="" disabled selected>Select a country</option>
+            </select>
+            <span class="field-error" id="departure-country-error" data-testid="departure-country-error"></span>
+          </div>
+
+          <div class="form-field">
+            <label for="arrival-country">Arrival country</label>
+            <select id="arrival-country" name="arrivalCountry" data-testid="arrival-country-select" required>
+              <option value="" disabled selected>Select a country</option>
+            </select>
+            <span class="field-error" id="arrival-country-error" data-testid="arrival-country-error"></span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label for="departure-date">Departure date</label>
+            <input type="date" id="departure-date" name="departureDate" data-testid="departure-date-input" required />
+            <span class="field-error" id="departure-date-error" data-testid="departure-date-error"></span>
+          </div>
+
+          <div class="form-field">
+            <label for="arrival-date">Return date</label>
+            <input type="date" id="arrival-date" name="arrivalDate" data-testid="arrival-date-input" required />
+            <span class="field-error" id="arrival-date-error" data-testid="arrival-date-error"></span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label for="adults-count">Adults</label>
+            <input type="number" id="adults-count" name="adults" data-testid="adults-input" min="1" value="1" required />
+            <span class="field-error" id="adults-error" data-testid="adults-error"></span>
+          </div>
+
+          <div class="form-field">
+            <label for="children-count">Children</label>
+            <input type="number" id="children-count" name="children" data-testid="children-input" min="0" value="0" required />
+            <span class="field-error" id="children-error" data-testid="children-error"></span>
+          </div>
+        </div>
+
+        <div class="price-preview hidden" id="trip-price-preview" data-testid="trip-price-preview">
+          <div>Price per traveler: <span id="price-preview-per-person" data-testid="price-preview-per-person">-</span></div>
+          <div class="price-preview-total">Estimated total: <span id="price-preview-total" data-testid="price-preview-total">-</span></div>
+        </div>
+
+        <div class="button-row">
+          <span></span>
+          <button type="submit" class="btn-primary" id="continue-to-traveler-btn" data-testid="continue-to-traveler-btn">
+            Continue
+          </button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/state.js"></script>
+  <script src="/js/page-trip.js"></script>
+</body>
+</html>
