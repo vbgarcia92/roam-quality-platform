@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Roam Trip Booking - Traveler Information</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body id="page-traveler-info" data-testid="page-traveler-info">
+  <header class="app-header">
+    <h1>Roam Trip Booking</h1>
+  </header>
+  <main class="app-main">
+    <nav class="step-indicator" aria-label="Booking steps">
+      <span class="step" data-testid="step-trip" id="step-trip">1. Trip</span>
+      <span class="step is-active" data-testid="step-traveler" id="step-traveler">2. Traveler</span>
+      <span class="step" data-testid="step-review" id="step-review">3. Review</span>
+      <span class="step" data-testid="step-confirmation" id="step-confirmation">4. Confirmation</span>
+    </nav>
+
+    <section class="card">
+      <h2>Traveler information</h2>
+
+      <div class="form-error-summary" id="traveler-form-error" data-testid="traveler-form-error" role="alert"></div>
+
+      <form id="traveler-info-form" data-testid="traveler-info-form" novalidate>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="first-name">First name</label>
+            <input type="text" id="first-name" name="firstName" data-testid="first-name-input" required />
+            <span class="field-error" id="first-name-error" data-testid="first-name-error"></span>
+          </div>
+
+          <div class="form-field">
+            <label for="last-name">Last name</label>
+            <input type="text" id="last-name" name="lastName" data-testid="last-name-input" required />
+            <span class="field-error" id="last-name-error" data-testid="last-name-error"></span>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="phone">Phone</label>
+          <input type="tel" id="phone" name="phone" data-testid="phone-input" required />
+          <span class="field-error" id="phone-error" data-testid="phone-error"></span>
+        </div>
+
+        <div class="form-field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" data-testid="email-input" required />
+          <span class="field-error" id="email-error" data-testid="email-error"></span>
+        </div>
+
+        <div class="button-row">
+          <button type="button" class="btn-secondary" id="back-to-trip-btn" data-testid="back-to-trip-btn">
+            Back
+          </button>
+          <button type="submit" class="btn-primary" id="continue-to-review-btn" data-testid="continue-to-review-btn">
+            Continue
+          </button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/state.js"></script>
+  <script src="/js/page-traveler.js"></script>
+</body>
+</html>
