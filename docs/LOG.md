@@ -7,3 +7,12 @@
 - First commit to the repository
 
 ---
+
+## Day 2 - Foundation - 23/09/2026
+
+- Scaffolded a System Under Test
+- Claude Code to help on this task
+- Simple booking system
+- Fastify API - Postgres and Docker compose
+
+---
