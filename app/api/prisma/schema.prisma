@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// A concrete scheduled itinerary customers can book: one country with a
+// fixed date window and price. This is a richer catalogue than the static
+// 12-country list the current booking UI uses; it exists for seeding
+// realistic reference/test data (automation + performance fixtures).
+model Trip {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  country        String
+  departureDate  DateTime  @map("departure_date") @db.Date
+  arrivalDate    DateTime  @map("arrival_date") @db.Date
+  pricePerPerson Decimal   @map("price_per_person") @db.Decimal(10, 2)
+  currency       String    @default("USD")
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  bookings       Booking[]
+
+  @@map("trips")
+}
+
+model User {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  firstName String    @map("first_name")
+  lastName  String    @map("last_name")
+  email     String    @unique
+  phone     String
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  bookings  Booking[]
+
+  @@map("users")
+}
+
+// Mirrors the columns the current Fastify API already reads/writes by hand
+// (see src/routes/bookings.ts) so the live raw-SQL queries keep working
+// unchanged. tripId/userId are new, optional FKs for future use once the
+// API is wired up to reference real Trip/User records.
+model Booking {
+  id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tripId             String?  @map("trip_id") @db.Uuid
+  trip               Trip?    @relation(fields: [tripId], references: [id])
+  userId             String?  @map("user_id") @db.Uuid
+  user               User?    @relation(fields: [userId], references: [id])
+  destinationId      String   @map("destination_id")
+  destinationCountry String   @map("destination_country")
+  departureCountry   String   @map("departure_country")
+  departureDate      DateTime @map("departure_date") @db.Date
+  arrivalDate        DateTime @map("arrival_date") @db.Date
+  adults             Int
+  children           Int
+  travelerFirstName  String   @map("traveler_first_name")
+  travelerLastName   String   @map("traveler_last_name")
+  travelerPhone      String   @map("traveler_phone")
+  travelerEmail      String   @map("traveler_email")
+  pricePerPerson     Decimal  @map("price_per_person") @db.Decimal(10, 2)
+  totalPrice         Decimal  @map("total_price") @db.Decimal(10, 2)
+  currency           String
+  status             String   @default("CONFIRMED")
+  createdAt          DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@map("bookings")
+}
