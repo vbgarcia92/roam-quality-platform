@@ -16,3 +16,17 @@
 - Fastify API - Postgres and Docker compose
 
 ---
+
+## Day 3 - Foundation - 24/09/2026
+
+- Test Data creation for the booking app
+- Script to seed data into Postgres
+
+---
+
+## Day 4 - Foundation - 25/09/2026
+
+- Auth creation using jwt bearer
+- CHAOS flag to add slowness to the system
+- additional API paths created for API testing
+- All using cc support for this task
