@@ -24,6 +24,7 @@ export interface CreateBookingBody {
 
 export interface Booking {
   id: string;
+  userId: string | null;
   destinationId: string;
   destinationCountry: string;
   departureCountry: string;

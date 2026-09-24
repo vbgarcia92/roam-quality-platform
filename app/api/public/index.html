@@ -59,13 +59,13 @@
         <div class="form-row">
           <div class="form-field">
             <label for="adults-count">Adults</label>
-            <input type="number" id="adults-count" name="adults" data-testid="adults-input" min="1" value="1" required />
+            <input type="number" id="adults-count" name="adults" data-testid="adults-input" min="1" max="10" value="1" required />
             <span class="field-error" id="adults-error" data-testid="adults-error"></span>
           </div>
 
           <div class="form-field">
             <label for="children-count">Children</label>
-            <input type="number" id="children-count" name="children" data-testid="children-input" min="0" value="0" required />
+            <input type="number" id="children-count" name="children" data-testid="children-input" min="0" max="10" value="0" required />
             <span class="field-error" id="children-error" data-testid="children-error"></span>
           </div>
         </div>
