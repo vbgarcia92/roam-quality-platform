@@ -60,13 +60,59 @@ re-run with `npm run db:seed`.
 
 ## API
 
-| Method | Path            | Description                                   |
-| ------ | --------------- | ---------------------------------------------- |
-| GET    | `/health`       | Liveness + DB connectivity check               |
-| GET    | `/trips`        | List of bookable destinations with fixed price |
-| GET    | `/trips/:id`    | Single destination                             |
-| POST   | `/bookings`     | Create a booking                               |
-| GET    | `/bookings/:id` | Fetch a booking                                |
+| Method | Path            | Description                                        |
+| ------ | --------------- | -------------------------------------------------- |
+| GET    | `/health`       | Liveness + DB connectivity check                   |
+| GET    | `/trips`        | List of bookable destinations with fixed price     |
+| GET    | `/trips/:id`    | Single destination                                 |
+| POST   | `/auth/token`   | Exchange email + password for a Bearer token (JWT) |
+| POST   | `/bookings`     | Create a booking (guest, or linked to a user)      |
+| GET    | `/bookings/:id` | Fetch a booking                                    |
+
+Validation failures return `400` with
+`{ "error": "Validation failed", "details": ["field message", ...] }`.
+
+### Authentication
+
+```bash
+curl -X POST http://localhost:3000/auth/token \
+  -H "Content-Type: application/json" \
+  -d '{"email":"ana.silva@example.com","password":"Roam@Test123"}'
+# => { "accessToken": "...", "tokenType": "Bearer", "expiresIn": 3600 }
+```
+
+All 5 seeded users share the test password `Roam@Test123`. Wrong password
+and unknown email both return the same `401`.
+
+Auth on `POST /bookings` is optional so the guest UI flow keeps working:
+
+- no `Authorization` header: guest booking, `userId: null`
+- valid `Authorization: Bearer <token>`: booking is linked to that user
+- invalid, expired, or non-Bearer token, or a token for a user that no longer
+  exists: `401`
+
+### Booking validation rules
+
+- `destinationId` must be one of the 12 destinations
+- `departureDate` / `arrivalDate` are `YYYY-MM-DD`; departure can't be in
+  the past; arrival must be on or after departure
+- `adults` 1-10 and `children` 0-10, JSON integers (types are not coerced,
+  so `"2"` or `true` are rejected)
+- traveler names can't be blank; `phone` and `email` must be well-formed
+- unknown fields are stripped rather than rejected
+
+## Chaos: deliberate latency defect
+
+Setting `CHAOS_LATENCY=true` adds **4000ms** to every `GET /trips` (trip
+search). Every other endpoint is unaffected. This defect is injected on
+purpose for the testing phase. The API logs a warning at startup when
+it's on.
+
+```bash
+cd app
+CHAOS_LATENCY=true docker compose up -d api   # enable
+docker compose up -d api                      # disable (default: false)
+```
 
 ## UI flow
 

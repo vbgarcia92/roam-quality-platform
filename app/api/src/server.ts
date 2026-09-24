@@ -9,6 +9,10 @@ async function main(): Promise<void> {
   // via `prisma migrate deploy` before this process starts.
   await waitForDatabase();
 
+  if (config.chaosLatency) {
+    app.log.warn(`CHAOS_LATENCY enabled: GET /trips is delayed by ${config.chaosLatencyMs}ms`);
+  }
+
   await app.listen({ port: config.port, host: config.host });
 }
 

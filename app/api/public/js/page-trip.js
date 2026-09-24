@@ -20,7 +20,14 @@
     children: document.getElementById("children-error"),
   };
 
+  const MAX_PER_TYPE = 10;
   let trips = [];
+
+  function todayLocal() {
+    const now = new Date();
+    const pad = (n) => String(n).padStart(2, "0");
+    return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+  }
 
   function clearErrors() {
     formErrorEl.classList.remove("is-visible");
@@ -102,6 +109,9 @@
     if (!departureDateInput.value) {
       setFieldError("departureDate", "Select a departure date");
       valid = false;
+    } else if (departureDateInput.value < todayLocal()) {
+      setFieldError("departureDate", "Departure date cannot be in the past");
+      valid = false;
     }
     if (!arrivalDateInput.value) {
       setFieldError("arrivalDate", "Select a return date");
@@ -116,13 +126,13 @@
       valid = false;
     }
     const adults = parseInt(adultsInput.value, 10);
-    if (!Number.isInteger(adults) || adults < 1) {
-      setFieldError("adults", "At least 1 adult is required");
+    if (!Number.isInteger(adults) || adults < 1 || adults > MAX_PER_TYPE) {
+      setFieldError("adults", `Adults must be between 1 and ${MAX_PER_TYPE}`);
       valid = false;
     }
     const children = parseInt(childrenInput.value, 10);
-    if (!Number.isInteger(children) || children < 0) {
-      setFieldError("children", "Children must be 0 or more");
+    if (!Number.isInteger(children) || children < 0 || children > MAX_PER_TYPE) {
+      setFieldError("children", `Children must be between 0 and ${MAX_PER_TYPE}`);
       valid = false;
     }
 

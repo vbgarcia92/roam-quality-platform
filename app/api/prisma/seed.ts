@@ -1,6 +1,10 @@
 import { PrismaClient } from "@prisma/client";
+import { hashPassword } from "../src/auth/password";
 
 const prisma = new PrismaClient();
+
+// Shared, documented password for the seeded test accounts (see app/README.md).
+const SEED_USER_PASSWORD = "Roam@Test123";
 
 // 20 scheduled trips across the 12 countries the booking UI supports, with
 // a couple of extra date options for the more popular destinations.
@@ -51,10 +55,11 @@ async function main() {
   });
 
   for (const user of USERS) {
+    const data = { ...user, passwordHash: await hashPassword(SEED_USER_PASSWORD) };
     await prisma.user.upsert({
       where: { email: user.email },
-      update: user,
-      create: user,
+      update: data,
+      create: data,
     });
   }
 
