@@ -30,3 +30,14 @@
 - CHAOS flag to add slowness to the system
 - additional API paths created for API testing
 - All using cc support for this task
+
+## Day 5 - Foundation - 26/09/2026
+
+## Day 6 - Review - 27/09/2026
+
+- What shipped this week a hiring manager would care about?
+- A well structured website with additional enhancements apart from html-css-js
+- What slipped — scope or energy? - Energy
+- Where did AI write something you couldn't defend in an interview?
+- What's the one thing that must happen next week? - Dont miss a day
+- Is the plan still right, or does a phase need re-scoping? - no, plan is all right. I will catch up
