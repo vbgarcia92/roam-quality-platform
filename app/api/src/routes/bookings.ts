@@ -1,10 +1,11 @@
 import { FastifyInstance } from "fastify";
 import { randomUUID } from "crypto";
 import { pool } from "../db";
-import { DESTINATIONS, findDestination } from "../data/destinations";
-import { Booking, CreateBookingBody } from "../types";
+import { earliestCurrentDate } from "../dates";
+import { Booking, CreateBookingBody, Trip } from "../types";
 import { formatValidationErrors } from "../validation";
 import { InvalidTokenError, resolveOptionalUserId } from "../auth/jwt";
+import { findTrip } from "./trips";
 
 const MAX_TRAVELERS_PER_TYPE = 10;
 const NON_BLANK = "\\S";
@@ -14,20 +15,10 @@ const nameSchema = { type: "string", minLength: 1, maxLength: 100, pattern: NON_
 const createBookingSchema = {
   type: "object",
   additionalProperties: false,
-  required: [
-    "destinationId",
-    "departureCountry",
-    "departureDate",
-    "arrivalDate",
-    "adults",
-    "children",
-    "traveler",
-  ],
+  required: ["tripId", "departureCountry", "adults", "children", "traveler"],
   properties: {
-    destinationId: { type: "string", enum: DESTINATIONS.map((d) => d.id) },
+    tripId: { type: "string", format: "uuid" },
     departureCountry: nameSchema,
-    departureDate: { type: "string", format: "date" },
-    arrivalDate: { type: "string", format: "date" },
     adults: { type: "integer", minimum: 1, maximum: MAX_TRAVELERS_PER_TYPE },
     children: { type: "integer", minimum: 0, maximum: MAX_TRAVELERS_PER_TYPE },
     traveler: {
@@ -50,28 +41,25 @@ const bookingParamsSchema = {
   properties: { id: { type: "string", format: "uuid" } },
 } as const;
 
-// The earliest calendar date currently in effect anywhere (UTC-12), so a
-// traveler west of UTC booking "today" late in their evening isn't rejected.
-function earliestCurrentDate(): string {
-  return new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString().slice(0, 10);
-}
-
-// Cross-field rules JSON Schema can't express. Dates are YYYY-MM-DD, so
-// string comparison is chronological.
-function businessRuleErrors(body: CreateBookingBody): string[] {
+function businessRuleErrors(body: CreateBookingBody, trip: Trip): string[] {
   const errors: string[] = [];
-  if (body.departureDate < earliestCurrentDate()) {
-    errors.push("departureDate must not be in the past");
+  if (trip.departureDate < earliestCurrentDate()) {
+    errors.push("trip has already departed");
   }
-  if (body.arrivalDate < body.departureDate) {
-    errors.push("arrivalDate must be on or after departureDate");
+  if (body.departureCountry.trim().toLowerCase() === trip.country.toLowerCase()) {
+    errors.push("departureCountry must differ from the trip's country");
   }
   return errors;
+}
+
+function slugify(country: string): string {
+  return country.toLowerCase().replace(/\s+/g, "-");
 }
 
 function toBooking(row: any): Booking {
   return {
     id: row.id,
+    tripId: row.trip_id,
     userId: row.user_id,
     destinationId: row.destination_id,
     destinationCountry: row.destination_country,
@@ -115,39 +103,48 @@ export async function bookingsRoutes(app: FastifyInstance): Promise<void> {
       }
 
       const body = request.body as CreateBookingBody;
-      const ruleErrors = businessRuleErrors(body);
+      const trip = await findTrip(body.tripId);
+      if (!trip) {
+        return reply.status(400).send({
+          error: "Validation failed",
+          details: ["tripId does not reference an existing trip"],
+        });
+      }
+
+      const ruleErrors = businessRuleErrors(body, trip);
       if (ruleErrors.length > 0) {
         return reply.status(400).send({ error: "Validation failed", details: ruleErrors });
       }
 
-      const destination = findDestination(body.destinationId)!;
-      const totalPrice = destination.pricePerPerson * (body.adults + body.children);
-
+      // Destination, dates and price are copied from the trip so the booking
+      // keeps what was actually purchased even if the trip changes later.
+      const totalPrice = trip.pricePerPerson * (body.adults + body.children);
       const result = await pool.query(
         `INSERT INTO bookings (
-          id, user_id, destination_id, destination_country, departure_country,
+          id, trip_id, user_id, destination_id, destination_country, departure_country,
           departure_date, arrival_date, adults, children,
           traveler_first_name, traveler_last_name, traveler_phone, traveler_email,
           price_per_person, total_price, currency, status
-        ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,'CONFIRMED')
+        ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,'CONFIRMED')
         RETURNING *`,
         [
           randomUUID(),
+          trip.id,
           userId,
-          destination.id,
-          destination.country,
+          slugify(trip.country),
+          trip.country,
           body.departureCountry.trim(),
-          body.departureDate,
-          body.arrivalDate,
+          trip.departureDate,
+          trip.arrivalDate,
           body.adults,
           body.children,
           body.traveler.firstName.trim(),
           body.traveler.lastName.trim(),
           body.traveler.phone.trim(),
           body.traveler.email.trim(),
-          destination.pricePerPerson,
+          trip.pricePerPerson,
           totalPrice,
-          destination.currency,
+          trip.currency,
         ],
       );
 

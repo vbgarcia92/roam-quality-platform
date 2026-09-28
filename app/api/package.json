@@ -21,7 +21,6 @@
   "dependencies": {
     "@fastify/cors": "^11.3.0",
     "@fastify/jwt": "^10.2.2",
-    "@fastify/static": "^10.1.4",
     "@prisma/client": "6.19.3",
     "fastify": "^5.12.5",
     "pg": "^8.13.1",

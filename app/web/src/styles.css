@@ -22,43 +22,25 @@ body {
   color: var(--color-text);
 }
 
-header.app-header {
+.app-header {
   background: var(--color-primary);
-  color: #fff;
   padding: 1rem 1.5rem;
 }
 
-header.app-header h1 {
+.app-header a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.app-header h1 {
   margin: 0;
   font-size: 1.25rem;
 }
 
-main.app-main {
-  max-width: 640px;
+.app-main {
+  max-width: 880px;
   margin: 2rem auto;
   padding: 0 1rem;
-}
-
-.step-indicator {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
-  font-size: 0.85rem;
-  color: var(--color-muted);
-}
-
-.step-indicator .step {
-  padding: 0.25rem 0.6rem;
-  border-radius: 999px;
-  border: 1px solid var(--color-border);
-  background: var(--color-card);
-}
-
-.step-indicator .step.is-active {
-  background: var(--color-primary);
-  color: #fff;
-  border-color: var(--color-primary);
-  font-weight: 600;
 }
 
 .card {
@@ -68,11 +50,63 @@ main.app-main {
   padding: 1.5rem;
 }
 
+.muted {
+  color: var(--color-muted);
+  font-size: 0.9em;
+}
+
+.status-message {
+  color: var(--color-muted);
+}
+
+/* Trip list */
+.trip-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.trip-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.trip-card h3,
+.trip-card p {
+  margin: 0;
+}
+
+.trip-card-price {
+  font-weight: 700;
+  color: var(--color-primary-dark);
+}
+
+.trip-card .btn {
+  margin-top: auto;
+  align-self: flex-start;
+}
+
+.trip-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  background: #eef4fa;
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  margin-bottom: 1.25rem;
+}
+
+/* Forms */
 .form-field {
   margin-bottom: 1.1rem;
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
+  flex: 1;
 }
 
 .form-field label {
@@ -85,10 +119,6 @@ main.app-main {
   gap: 1rem;
 }
 
-.form-row .form-field {
-  flex: 1;
-}
-
 input,
 select {
   padding: 0.6rem 0.7rem;
@@ -99,9 +129,8 @@ select {
   color: var(--color-text);
 }
 
-input:invalid,
-select:invalid {
-  box-shadow: none;
+[aria-invalid="true"] {
+  border-color: var(--color-error);
 }
 
 .field-error {
@@ -117,11 +146,11 @@ select:invalid {
   border-radius: 6px;
   padding: 0.75rem 1rem;
   margin-bottom: 1rem;
-  display: none;
 }
 
-.form-error-summary.is-visible {
-  display: block;
+.form-error-summary p,
+.form-error-summary ul {
+  margin: 0.25rem 0;
 }
 
 .price-preview {
@@ -130,29 +159,33 @@ select:invalid {
   border-radius: 8px;
   padding: 0.85rem 1rem;
   margin-bottom: 1.2rem;
-  font-size: 0.95rem;
 }
 
-.price-preview .price-preview-total {
+.price-preview-total {
   font-weight: 700;
   font-size: 1.15rem;
   color: var(--color-primary-dark);
 }
 
+/* Buttons (also applied to Links) */
 .button-row {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-top: 1.5rem;
   gap: 1rem;
 }
 
-button {
+.btn {
+  display: inline-block;
   font-size: 1rem;
   padding: 0.65rem 1.3rem;
   border-radius: 6px;
   border: none;
   cursor: pointer;
   font-weight: 600;
+  text-decoration: none;
+  font-family: inherit;
 }
 
 .btn-primary {
@@ -175,6 +208,7 @@ button {
   border: 1px solid var(--color-primary);
 }
 
+/* Summaries */
 .summary-list {
   display: grid;
   grid-template-columns: max-content 1fr;
@@ -192,15 +226,24 @@ button {
   margin: 0;
 }
 
-.summary-total-row dt,
-.summary-total-row dd {
+.summary-total-row {
   font-size: 1.15rem;
   font-weight: 700;
   color: var(--color-primary-dark);
 }
 
+.summary-list dt.summary-total-row {
+  color: var(--color-primary-dark);
+}
+
 .confirmation-panel {
   text-align: center;
+}
+
+.confirmation-panel .summary-list {
+  text-align: left;
+  max-width: 420px;
+  margin: 1.5rem auto;
 }
 
 .confirmation-icon {
@@ -220,6 +263,9 @@ button {
   display: inline-block;
 }
 
-.hidden {
-  display: none !important;
+@media (max-width: 600px) {
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
 }

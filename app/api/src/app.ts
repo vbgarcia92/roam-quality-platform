@@ -1,8 +1,6 @@
-import path from "path";
 import Fastify, { FastifyInstance } from "fastify";
 import cors from "@fastify/cors";
 import fastifyJwt from "@fastify/jwt";
-import fastifyStatic from "@fastify/static";
 import { config } from "./config";
 import { healthRoutes } from "./routes/health";
 import { tripsRoutes } from "./routes/trips";
@@ -26,11 +24,6 @@ export function buildApp(): FastifyInstance {
   app.register(fastifyJwt, {
     secret: config.jwtSecret,
     sign: { expiresIn: `${config.tokenTtlSeconds}s` },
-  });
-
-  app.register(fastifyStatic, {
-    root: path.join(__dirname, "..", "public"),
-    prefix: "/",
   });
 
   app.register(healthRoutes);
