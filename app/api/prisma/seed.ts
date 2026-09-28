@@ -6,30 +6,37 @@ const prisma = new PrismaClient();
 // Shared, documented password for the seeded test accounts (see app/README.md).
 const SEED_USER_PASSWORD = "Roam@Test123";
 
-// 20 scheduled trips across the 12 countries the booking UI supports, with
-// a couple of extra date options for the more popular destinations.
+// 20 scheduled trips across the 12 supported countries, with extra date
+// options for the more popular destinations. Dates are offsets from the day
+// the seed runs, so re-seeding always yields a fully bookable catalogue
+// (departed trips drop out of GET /trips and can't be booked).
 const TRIPS = [
-  { country: "Vietnam", departureDate: "2026-11-05", arrivalDate: "2026-11-18", pricePerPerson: 1200 },
-  { country: "Vietnam", departureDate: "2027-02-10", arrivalDate: "2027-02-24", pricePerPerson: 1250 },
-  { country: "Japan", departureDate: "2026-10-20", arrivalDate: "2026-10-30", pricePerPerson: 1800 },
-  { country: "Japan", departureDate: "2027-04-01", arrivalDate: "2027-04-12", pricePerPerson: 1950 },
-  { country: "Korea", departureDate: "2026-11-15", arrivalDate: "2026-11-25", pricePerPerson: 1600 },
-  { country: "New Zealand", departureDate: "2026-12-10", arrivalDate: "2026-12-24", pricePerPerson: 2200 },
-  { country: "New Zealand", departureDate: "2027-01-15", arrivalDate: "2027-01-29", pricePerPerson: 2300 },
-  { country: "Australia", departureDate: "2026-12-05", arrivalDate: "2026-12-19", pricePerPerson: 2000 },
-  { country: "Australia", departureDate: "2027-03-01", arrivalDate: "2027-03-14", pricePerPerson: 2050 },
-  { country: "Brazil", departureDate: "2026-10-10", arrivalDate: "2026-10-20", pricePerPerson: 900 },
-  { country: "Brazil", departureDate: "2027-02-01", arrivalDate: "2027-02-12", pricePerPerson: 1100 },
-  { country: "Argentina", departureDate: "2026-11-01", arrivalDate: "2026-11-14", pricePerPerson: 950 },
-  { country: "USA", departureDate: "2026-10-15", arrivalDate: "2026-10-25", pricePerPerson: 1500 },
-  { country: "USA", departureDate: "2027-06-01", arrivalDate: "2027-06-14", pricePerPerson: 1600 },
-  { country: "Netherlands", departureDate: "2027-04-15", arrivalDate: "2027-04-25", pricePerPerson: 1300 },
-  { country: "France", departureDate: "2026-10-05", arrivalDate: "2026-10-15", pricePerPerson: 1400 },
-  { country: "France", departureDate: "2027-05-01", arrivalDate: "2027-05-12", pricePerPerson: 1450 },
-  { country: "Italy", departureDate: "2026-10-25", arrivalDate: "2026-11-05", pricePerPerson: 1350 },
-  { country: "Italy", departureDate: "2027-05-20", arrivalDate: "2027-06-01", pricePerPerson: 1400 },
-  { country: "Indonesia", departureDate: "2026-11-20", arrivalDate: "2026-12-02", pricePerPerson: 1100 },
+  { country: "Vietnam", startsInDays: 42, nights: 13, pricePerPerson: 1200 },
+  { country: "Vietnam", startsInDays: 139, nights: 14, pricePerPerson: 1250 },
+  { country: "Japan", startsInDays: 26, nights: 10, pricePerPerson: 1800 },
+  { country: "Japan", startsInDays: 189, nights: 11, pricePerPerson: 1950 },
+  { country: "Korea", startsInDays: 52, nights: 10, pricePerPerson: 1600 },
+  { country: "New Zealand", startsInDays: 77, nights: 14, pricePerPerson: 2200 },
+  { country: "New Zealand", startsInDays: 113, nights: 14, pricePerPerson: 2300 },
+  { country: "Australia", startsInDays: 72, nights: 14, pricePerPerson: 2000 },
+  { country: "Australia", startsInDays: 158, nights: 13, pricePerPerson: 2050 },
+  { country: "Brazil", startsInDays: 16, nights: 10, pricePerPerson: 900 },
+  { country: "Brazil", startsInDays: 130, nights: 11, pricePerPerson: 1100 },
+  { country: "Argentina", startsInDays: 38, nights: 13, pricePerPerson: 950 },
+  { country: "USA", startsInDays: 21, nights: 10, pricePerPerson: 1500 },
+  { country: "USA", startsInDays: 250, nights: 13, pricePerPerson: 1600 },
+  { country: "Netherlands", startsInDays: 203, nights: 10, pricePerPerson: 1300 },
+  { country: "France", startsInDays: 11, nights: 10, pricePerPerson: 1400 },
+  { country: "France", startsInDays: 219, nights: 11, pricePerPerson: 1450 },
+  { country: "Italy", startsInDays: 31, nights: 11, pricePerPerson: 1350 },
+  { country: "Italy", startsInDays: 238, nights: 12, pricePerPerson: 1400 },
+  { country: "Indonesia", startsInDays: 57, nights: 12, pricePerPerson: 1100 },
 ] as const;
+
+function daysFromToday(days: number): Date {
+  const now = new Date();
+  return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + days));
+}
 
 const USERS = [
   { firstName: "Ana", lastName: "Silva", email: "ana.silva@example.com", phone: "+55 11 91234-5678" },
@@ -47,8 +54,8 @@ async function main() {
   await prisma.trip.createMany({
     data: TRIPS.map((trip) => ({
       country: trip.country,
-      departureDate: new Date(trip.departureDate),
-      arrivalDate: new Date(trip.arrivalDate),
+      departureDate: daysFromToday(trip.startsInDays),
+      arrivalDate: daysFromToday(trip.startsInDays + trip.nights),
       pricePerPerson: trip.pricePerPerson,
       currency: "USD",
     })),

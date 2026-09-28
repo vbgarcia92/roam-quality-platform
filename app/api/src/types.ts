@@ -1,6 +1,8 @@
-export interface Destination {
+export interface Trip {
   id: string;
   country: string;
+  departureDate: string;
+  arrivalDate: string;
   pricePerPerson: number;
   currency: string;
 }
@@ -13,10 +15,8 @@ export interface TravelerInfo {
 }
 
 export interface CreateBookingBody {
-  destinationId: string;
+  tripId: string;
   departureCountry: string;
-  departureDate: string;
-  arrivalDate: string;
   adults: number;
   children: number;
   traveler: TravelerInfo;
@@ -24,6 +24,7 @@ export interface CreateBookingBody {
 
 export interface Booking {
   id: string;
+  tripId: string | null;
   userId: string | null;
   destinationId: string;
   destinationCountry: string;

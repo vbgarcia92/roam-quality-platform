@@ -34,5 +34,15 @@ services:
       db:
         condition: service_healthy
 
+  web:
+    build:
+      context: ./web
+    container_name: roam-trip-booking-web
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+
 volumes:
   roam-trip-booking-db-data:
